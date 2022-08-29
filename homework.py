@@ -75,7 +75,7 @@ def get_api_answer(current_timestamp):
         params=params
     )
     if response.status_code != 200:
-        raise Exception(f'Ошибка ответа от API.')
+        raise Exception('Ошибка ответа от API.')
 
     logging.info('Ответ от API получен!.')
     return response.json()
