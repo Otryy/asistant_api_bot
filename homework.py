@@ -38,16 +38,15 @@ logging.basicConfig(
 
 def send_message(bot, message):
     """Отправляет сообщение в Telegram чат."""
-    bot.send_message(
-        chat_id=TELEGRAM_CHAT_ID,
-        text=f'{message}'
-    )
     try:
+        bot.send_message(
+            chat_id=TELEGRAM_CHAT_ID,
+            text=f'{message}'
+        )
         logging.info('Начинаем отправку сообщения.')
 
     except ErrorMesage as error:
-        message_error = f'{error}'
-        logging.error(message_error)
+        raise ErrorMesage(error)
 
     else:
         logging.info('Отправка сообщения прошла успешно!.')
@@ -87,12 +86,12 @@ def check_response(response):
     if not isinstance(response, dict):
         raise TypeError('Вернулся не словарь')
 
+    if 'homeworks' not in response:
+        raise EmptyList('Пришел пустой ответ')
+
     homeworks = response.get('homeworks')
     if not isinstance(homeworks, list):
         raise NotList('Вернулся не список')
-
-    if 'homeworks' not in response:
-        raise EmptyList('Пришел пустой ответ')
 
     logging.info('Ответ API пришел в нужном формате!.')
     return homeworks
@@ -103,16 +102,16 @@ def parse_status(homework):
     homework_name = homework.get('homework_name')
     if 'homework_name' not in homework:
         message_error = 'Пустое значение homework_name'
-        logging.error(message_error)
+        raise KeyError(message_error)
     homework_status = homework.get('status')
 
     if 'status' not in homework:
         message_error = 'Пустое значение status'
-        logging.error(message_error)
+        raise KeyError(message_error)
 
     if homework_status not in HOMEWORK_STATUSES:
         message_error = 'Пустое значение homework_status'
-        logging.error(message_error)
+        raise KeyError(message_error)
 
     verdict = HOMEWORK_STATUSES[homework_status]
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
