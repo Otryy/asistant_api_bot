@@ -8,3 +8,7 @@ class EmptyList(Exception):
 
 class NotList(Exception):
     pass
+
+
+class ErrorMesage(Exception):
+    pass
