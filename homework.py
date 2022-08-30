@@ -45,7 +45,7 @@ def send_message(bot, message):
             chat_id=TELEGRAM_CHAT_ID,
             text=f'{message}'
         )
-        
+
     except ErrorMesage as error:
         raise ErrorMesage(error)
 
