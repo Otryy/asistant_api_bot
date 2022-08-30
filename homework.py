@@ -2,6 +2,7 @@ import logging
 import os
 import sys
 import time
+from http import HTTPStatus
 
 import requests
 import telegram
@@ -39,12 +40,12 @@ logging.basicConfig(
 def send_message(bot, message):
     """Отправляет сообщение в Telegram чат."""
     try:
+        logging.info('Начинаем отправку сообщения.')
         bot.send_message(
             chat_id=TELEGRAM_CHAT_ID,
             text=f'{message}'
         )
-        logging.info('Начинаем отправку сообщения.')
-
+        
     except ErrorMesage as error:
         raise ErrorMesage(error)
 
@@ -73,7 +74,7 @@ def get_api_answer(current_timestamp):
         headers=HEADERS,
         params=params
     )
-    if response.status_code != 200:
+    if response.status_code != HTTPStatus.OK:
         raise Exception('Ошибка ответа от API.')
 
     logging.info('Ответ от API получен!.')
